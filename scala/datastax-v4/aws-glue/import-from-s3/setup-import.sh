@@ -10,10 +10,14 @@ echo "S3URI: S3 URI to export to"
 echo "FORMAT: format of the export parquet, json, csv"
 
 PARENT_STACK_NAME=${1:-aksglue}
-STACK_NAME="${2:-$PARENT_STACK_NAME-export}"
+STACK_NAME="${2:-$PARENT_STACK_NAME-import}"
 KEYSPACE_NAME=${3:-mykeyspace}
 TABLE_NAME=${4:-mytable}
 FORMAT=${6:-parquet}
+
+echo "Deleting CloudFormation ${STACK_NAME} to make way for fresh config."
+aws cloudformation delete-stack --stack-name ${STACK_NAME}
+# TODO - add a wait for delete state
 
 echo "Parent stack used: ${PARENT_STACK_NAME}"
 echo "Stack name used:   ${STACK_NAME}"
@@ -26,7 +30,8 @@ if ! command -v aws &> /dev/null; then
     exit 1
 fi
 
-export KEYSPACES_GLUE_BUCKET=$(aws cloudformation describe-stacks --query "Stacks[?StackName==\`$PARENT_STACK_NAME\`][].Outputs[?ExportName==\`KeyspacesBucketNameExport-$PARENT_STACK_NAME\`]".OutputValue --output text)
+#export KEYSPACES_GLUE_BUCKET=$(aws cloudformation describe-stacks --query "Stacks[?StackName==\`$PARENT_STACK_NAME\`][].Outputs[?ExportName==\`KeyspacesBucketNameExport-$PARENT_STACK_NAME\`]".OutputValue --output text)
+export KEYSPACES_GLUE_BUCKET=amazon-keyspaces-glue-eu-central-1-gluekscfstack-575545957491
 
 if [ -z "${KEYSPACES_GLUE_BUCKET}" ]; then
 	echo "Parent stack not found. Cloudformation Export not found KeyspacesBucketNameExport-$PARENT_STACK_NAME"
