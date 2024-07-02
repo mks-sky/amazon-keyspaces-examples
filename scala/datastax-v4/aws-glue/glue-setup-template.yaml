@@ -23,6 +23,7 @@ Resources:
     Properties:
       RoleName: !Sub '${KeyspacesGlueServiceRoleName}'
       Description: 'AWS Glue service role to import and export data from Amazon Keyspaces'
+      PermissionsBoundary: arn:aws:iam::575545957491:policy/org/skycloud-policy-residentPermissionsBoundary
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
