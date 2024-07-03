@@ -1,6 +1,13 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: 'Create Import Glue job from S3 to Amazon Keyspaces'
 Parameters:
+  ParentStack:
+      NoEcho: false
+      Description: Stack used to setup the spark cassandra connector
+      Type: String
+      Default: aksglue1
+      MinLength: 3
+      MaxLength: 48
   KeyspaceName: 
       NoEcho: false
       Description: Cassandra Keyspace name
@@ -83,5 +90,5 @@ Resources:
       Role: "arn:aws:iam::575545957491:role/amazon-keyspaces-glue-servcie-role-gluekscfstack"
       #SecurityConfiguration: String
       #Tags: Json
-      Timeout: 2
+      Timeout: 10
       WorkerType: G.1X
